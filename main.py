@@ -1,5 +1,9 @@
 from oauth.auth import run_authorization
 from gmail.client import GmailClient
+import logging_setup
+
+
+logging_setup.setup_logging()
 
 creds = run_authorization()
 client = GmailClient(creds)
