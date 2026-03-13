@@ -1,4 +1,5 @@
 import base64
+import re
 
 def decode_base64(data):
     if not data:
@@ -34,3 +35,18 @@ def extract_body(payload):
                     return result
 
     return None
+
+
+def get_unsubscribe_headers(payload):
+    headers_to_search = ['List-Unsubscribe', 'List-Unsubscribe-Post']
+    headers = {}
+    for header in payload['headers']:
+        if header['name'] in headers_to_search:
+            headers[header['name']] = header['value']
+
+    unsub_list = headers.get('List-Unsubscribe')
+    if not unsub_list:
+        return headers
+
+    headers['List-Unsubscribe'] = unsub_list.replace('<', '').replace('>', '').split(',')
+    return headers
